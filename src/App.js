@@ -7,6 +7,7 @@ class App extends React.Component {
     super(props);
     this.state = {
       temperature: "",
+      objects: {},
       city: "1"
     };
 
@@ -27,7 +28,8 @@ class App extends React.Component {
       .then(response => {
         console.log(response);
         this.setState({
-          temperature: response.data.data[2019].max
+          temperature: response.data.data[2019].max,
+          objects: response.data.data
         });
       })
       .catch(error => {
@@ -41,6 +43,13 @@ class App extends React.Component {
 
   render() {
     const temperature = parseFloat(this.state.temperature).toFixed(2);
+
+    var obj = this.state.objects;
+    var result = Object.keys(obj).map(key => {
+      return [{ year: String(key), max: obj[key] }];
+    });
+
+    console.log(result);
     return (
       <div>
         <select value={this.state.city} onChange={this.handleChange}>
@@ -48,7 +57,14 @@ class App extends React.Component {
           <option value="2">Los Angeles</option>
         </select>
 
-        <p>{temperature}</p>
+        <p>{temperature} not this</p>
+        {result.map(item => {
+          return (
+            <p>
+              {item[0].year} {item[0].max.max}
+            </p>
+          );
+        })}
       </div>
     );
   }
