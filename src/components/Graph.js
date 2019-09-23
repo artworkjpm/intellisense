@@ -1,6 +1,7 @@
 import React from "react";
 import axios from "axios";
 import { Line } from "react-chartjs-2";
+import { sortNumber, linearRegression } from "./LinearRegression";
 
 class Graph extends React.Component {
   constructor(props) {
@@ -98,36 +99,6 @@ class Graph extends React.Component {
     this.showCities();
   }
 
-  sortNumber(a, b) {
-    return a - b;
-  }
-
-  linearRegression(y, x) {
-    var lr = {};
-    var n = y.length;
-    var sum_x = 0;
-    var sum_y = 0;
-    var sum_xy = 0;
-    var sum_xx = 0;
-    var sum_yy = 0;
-
-    for (var i = 0; i < y.length; i++) {
-      sum_x += x[i];
-      sum_y += y[i];
-      sum_xy += x[i] * y[i];
-      sum_xx += x[i] * x[i];
-      sum_yy += y[i] * y[i];
-    }
-
-    lr["slope"] = (n * sum_xy - sum_x * sum_y) / (n * sum_xx - sum_x * sum_x);
-    lr["intercept"] = (sum_y - lr.slope * sum_x) / n;
-    lr["r2"] = Math.pow((n * sum_xy - sum_x * sum_y) / Math.sqrt((n * sum_xx - sum_x * sum_x) * (n * sum_yy - sum_y * sum_y)), 2);
-
-    return x => {
-      return lr.slope * x + lr.intercept;
-    };
-  }
-
   render() {
     /* NEWYORK /////////// */
     const NY = Object.keys(this.state.NewYork).map(key => {
@@ -140,10 +111,10 @@ class Graph extends React.Component {
     let y_coords_NY = NY.map(item => {
       return item.max;
     });
-    const trendline_NY = this.linearRegression(y_coords_NY, x_coords_NY);
-    const lowest_x_NY = x_coords_NY.sort(this.sortNumber)[0];
-    const hightest_x_NY = x_coords_NY.sort(this.sortNumber)[x_coords_NY.length - 1];
-    const trendline_points_NY = [[lowest_x_NY, trendline_NY(lowest_x_NY)], [hightest_x_NY, trendline_NY(hightest_x_NY)]];
+    const trendline_NY = linearRegression(y_coords_NY, x_coords_NY);
+    const lowest_x_NY = x_coords_NY.sort(sortNumber)[0];
+    const highest_x_NY = x_coords_NY.sort(sortNumber)[x_coords_NY.length - 1];
+    const trendline_points_NY = [[lowest_x_NY, trendline_NY(lowest_x_NY)], [highest_x_NY, trendline_NY(highest_x_NY)]];
 
     /* LOS ANGELES //////////////// */
     const LA = Object.keys(this.state.LosAngeles).map(key => {
@@ -156,10 +127,10 @@ class Graph extends React.Component {
     let y_coords_LA = LA.map(item => {
       return item.max;
     });
-    const trendline_LA = this.linearRegression(y_coords_LA, x_coords_LA);
-    const lowest_x_LA = x_coords_LA.sort(this.sortNumber)[0];
-    const hightest_x_LA = x_coords_LA.sort(this.sortNumber)[x_coords_LA.length - 1];
-    const trendline_points_LA = [[lowest_x_LA, trendline_LA(lowest_x_LA)], [hightest_x_LA, trendline_LA(hightest_x_LA)]];
+    const trendline_LA = linearRegression(y_coords_LA, x_coords_LA);
+    const lowest_x_LA = x_coords_LA.sort(sortNumber)[0];
+    const highest_x_LA = x_coords_LA.sort(sortNumber)[x_coords_LA.length - 1];
+    const trendline_points_LA = [[lowest_x_LA, trendline_LA(lowest_x_LA)], [highest_x_LA, trendline_LA(highest_x_LA)]];
 
     /* CHICAGO //////////*/
     const Chicago = Object.keys(this.state.Chicago).map(key => {
@@ -172,10 +143,10 @@ class Graph extends React.Component {
     let y_coords_CHIC = Chicago.map(item => {
       return item.max;
     });
-    const trendline_CHIC = this.linearRegression(y_coords_CHIC, x_coords_CHIC);
-    const lowest_x_CHIC = x_coords_CHIC.sort(this.sortNumber)[0];
-    const hightest_x_CHIC = x_coords_CHIC.sort(this.sortNumber)[x_coords_CHIC.length - 1];
-    const trendline_points_CHIC = [[lowest_x_CHIC, trendline_CHIC(lowest_x_CHIC)], [hightest_x_CHIC, trendline_CHIC(hightest_x_CHIC)]];
+    const trendline_CHIC = linearRegression(y_coords_CHIC, x_coords_CHIC);
+    const lowest_x_CHIC = x_coords_CHIC.sort(sortNumber)[0];
+    const highest_x_CHIC = x_coords_CHIC.sort(sortNumber)[x_coords_CHIC.length - 1];
+    const trendline_points_CHIC = [[lowest_x_CHIC, trendline_CHIC(lowest_x_CHIC)], [highest_x_CHIC, trendline_CHIC(highest_x_CHIC)]];
 
     const data = {
       datasets: [
@@ -282,7 +253,6 @@ class Graph extends React.Component {
           ],
           xAxes: [
             {
-              scaleID: "x-axis-0",
               labels: LA.map(item => {
                 return item.year;
               }),
