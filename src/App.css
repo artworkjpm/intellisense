@@ -1,6 +1,13 @@
 h2 {
   margin-top: 0px;
 }
+
+.canvasWrapper {
+  height: 640px;
+  min-height: 640px;
+  position: relative;
+  max-height: 640px;
+}
 select {
   -webkit-appearance: menulist;
   height: 40px;

@@ -295,8 +295,9 @@ class Graph extends React.Component {
                 Show / Hide Line
               </button>
             </div>
-
-            <Line data={data} options={data.options} />
+            <div className="canvasWrapper">
+              <Line data={data} options={data.options} />
+            </div>
 
             <div className="center grey">
               Data from{" "}
