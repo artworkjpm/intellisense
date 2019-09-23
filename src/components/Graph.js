@@ -51,8 +51,6 @@ class Graph extends React.Component {
     axios
       .get("https://app.climate.azavea.com/api/climate-data/1/RCP85/indicator/" + this.state.indicator + "/?years=2006:2030&units=C", this.headers())
       .then(response => {
-        console.log(response);
-
         this.setState({
           NewYork: response.data.data,
           yLabel: response.data.indicator.label,
@@ -260,11 +258,13 @@ class Graph extends React.Component {
           onClick: e => e.stopPropagation(),
           position: "bottom",
           labels: {
+            usePointStyle: false,
             filter: function(item) {
               // Logic to remove a particular legend item goes here
               return !item.text.includes("Hide");
             },
-            fontSize: 20
+            fontSize: 20,
+            padding: 20
           }
         },
         scales: {
@@ -304,32 +304,37 @@ class Graph extends React.Component {
       <div className="container">
         {this.state.hasLoaded ? (
           <div className="center">
-            <select value={this.state.city} onChange={this.handleChange}>
-              <option value="average_high_temperature">Average High Temperature</option>
-              <option value="average_low_temperature">Average Low Temperature</option>
-              <option value="max_high_temperature">Max High Temperature</option>
-              <option value="min_low_temperature">Min Low Temperature</option>
-            </select>
-            <button className="button" onClick={this.handleTrend}>
-              Show / Hide Trend Lines
-            </button>
-            <button className="button" onClick={this.handleDots}>
-              Show / Hide Ticks
-            </button>
-            <button className="button" onClick={this.handleLine}>
-              Show / Hide Line
-            </button>
+            <div className="center">
+              <h2>Climate Change Forecaster</h2>
+            </div>
+            <div className="center">
+              <select value={this.state.city} onChange={this.handleChange}>
+                <option value="average_high_temperature">Average High Temperature</option>
+                <option value="average_low_temperature">Average Low Temperature</option>
+                <option value="max_high_temperature">Max High Temperature</option>
+                <option value="min_low_temperature">Min Low Temperature</option>
+              </select>
+              <button className="button" onClick={this.handleTrend}>
+                Show / Hide Trend Lines
+              </button>
+              <button className="button" onClick={this.handleDots}>
+                Show / Hide Ticks
+              </button>
+              <button className="button" onClick={this.handleLine}>
+                Show / Hide Line
+              </button>
+            </div>
             <Line data={data} options={data.options} />{" "}
+            <div className="center grey">
+              Data from{" "}
+              <a href="https://climate.azavea.com/" target="_blank" rel="noopener noreferrer">
+                Azavea Climate API
+              </a>
+            </div>
           </div>
         ) : (
           ""
         )}
-        <div className="center grey">
-          Data from{" "}
-          <a href="https://climate.azavea.com/" target="_blank" rel="noopener noreferrer">
-            Azavea Climate API
-          </a>
-        </div>
       </div>
     );
   }
