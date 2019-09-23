@@ -324,7 +324,7 @@ class Graph extends React.Component {
                 Show / Hide Line
               </button>
             </div>
-            <Line data={data} options={data.options} />{" "}
+            <Line data={data} options={data.options} />
             <div className="center grey">
               Data from{" "}
               <a href="https://climate.azavea.com/" target="_blank" rel="noopener noreferrer">
