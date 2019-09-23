@@ -13,11 +13,13 @@ class Graph extends React.Component {
       yLabel: "",
       hasLoaded: false,
       showTrend: false,
-      showDots: 6
+      showDots: 6,
+      showLine: false
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleTrend = this.handleTrend.bind(this);
     this.handleDots = this.handleDots.bind(this);
+    this.handleLine = this.handleLine.bind(this);
   }
 
   handleChange(event) {
@@ -32,6 +34,9 @@ class Graph extends React.Component {
     } else {
       this.setState({ showDots: 6 });
     }
+  }
+  handleLine() {
+    this.setState({ showLine: !this.state.showLine });
   }
 
   headers() {
@@ -185,10 +190,9 @@ class Graph extends React.Component {
           borderColor: "black",
           backgroundColor: "black",
           borderWidth: 1,
-          showLine: false,
+          showLine: this.state.showLine,
           fill: false,
           pointStyle: "cross",
-          lineTension: 0,
           pointRadius: this.state.showDots
         },
         {
@@ -199,8 +203,7 @@ class Graph extends React.Component {
           borderWidth: 2,
           showLine: this.state.showTrend,
           fill: false,
-          pointRadius: 0,
-          lineTension: 1
+          pointRadius: 0
         },
 
         {
@@ -212,7 +215,7 @@ class Graph extends React.Component {
           borderColor: "red",
           backgroundColor: "red",
           borderWidth: 1,
-          showLine: false,
+          showLine: this.state.showLine,
           fill: false,
           pointStyle: "triangle",
           pointRadius: this.state.showDots
@@ -225,8 +228,7 @@ class Graph extends React.Component {
           borderWidth: 2,
           showLine: this.state.showTrend,
           fill: false,
-          pointRadius: 0,
-          lineTension: 1
+          pointRadius: 0
         },
         {
           label: "Chicago",
@@ -237,7 +239,7 @@ class Graph extends React.Component {
           borderColor: "blue",
           backgroundColor: "blue",
           borderWidth: 1,
-          showLine: false,
+          showLine: this.state.showLine,
           fill: false,
           pointRadius: this.state.showDots
         },
@@ -249,13 +251,13 @@ class Graph extends React.Component {
           borderWidth: 2,
           showLine: this.state.showTrend,
           fill: false,
-          pointRadius: 0,
-          lineTension: 1
+          pointRadius: 0
         }
       ],
 
       options: {
         legend: {
+          onClick: e => e.stopPropagation(),
           position: "bottom",
           labels: {
             filter: function(item) {
@@ -299,22 +301,35 @@ class Graph extends React.Component {
       }
     };
     return (
-      <div>
+      <div className="container">
         {this.state.hasLoaded ? (
-          <div>
+          <div className="center">
             <select value={this.state.city} onChange={this.handleChange}>
               <option value="average_high_temperature">Average High Temperature</option>
               <option value="average_low_temperature">Average Low Temperature</option>
               <option value="max_high_temperature">Max High Temperature</option>
               <option value="min_low_temperature">Min Low Temperature</option>
-            </select>{" "}
-            <Line data={data} options={data.options} />
-            <button onClick={this.handleTrend}>Show / Hide Trend Lines</button>
-            <button onClick={this.handleDots}>Show / Hide Ticks</button>
+            </select>
+            <button className="button" onClick={this.handleTrend}>
+              Show / Hide Trend Lines
+            </button>
+            <button className="button" onClick={this.handleDots}>
+              Show / Hide Ticks
+            </button>
+            <button className="button" onClick={this.handleLine}>
+              Show / Hide Line
+            </button>
+            <Line data={data} options={data.options} />{" "}
           </div>
         ) : (
           ""
         )}
+        <div className="center grey">
+          Data from{" "}
+          <a href="https://climate.azavea.com/" target="_blank" rel="noopener noreferrer">
+            Azavea Climate API
+          </a>
+        </div>
       </div>
     );
   }

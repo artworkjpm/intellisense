@@ -1,19 +1,18 @@
 import axios from "axios";
 
-export const NewYork = axios
-  .get("https://app.climate.azavea.com/api/climate-data/1/RCP85/indicator/average_high_temperature/?years=2006:2030&units=C", {
-    headers: {
-      Authorization: "Token 1a740d6aef7f5638ca7ec085a938085e8218f5f5"
-    }
-  })
-  .then(response => {
-    return response.data.data;
-  })
-  .catch(error => {
-    console.log(error);
-  });
+export const NewYork = () => {
+  axios
+    .get("https://app.climate.azavea.com/api/climate-data/1/RCP85/indicator/" + this.state.indicator + "/?years=2006:2030&units=C", this.headers())
+    .then(response => {
+      console.log(response);
 
-/* 
-NY: 1
-LA: 2
-CHICAGO:  3 */
+      this.setState({
+        NewYork: response.data.data,
+        yLabel: response.data.indicator.label,
+        hasLoaded: true
+      });
+    })
+    .catch(error => {
+      console.log(error);
+    });
+};
