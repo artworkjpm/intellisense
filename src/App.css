@@ -2,13 +2,14 @@ h2 {
   margin-top: 0px;
 }
 select {
+  -webkit-appearance: menulist;
   height: 40px;
   background-color: rgba(255, 99, 132, 0.2);
   color: #646464;
   border: 1px solid rgba(255, 99, 132, 1);
   font-weight: bold;
   font-size: 1.1em;
-  margin-right: 10px;
+  margin: 4px 10px;
 }
 option {
   padding: 5px;
